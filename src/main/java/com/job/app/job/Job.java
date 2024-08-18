@@ -1,7 +1,11 @@
 package com.job.app.job;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.job.app.company.Company;
+import com.job.app.review.Review;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Job {
@@ -15,19 +19,23 @@ public class Job {
     private String location;
 
     @ManyToOne
+    @JsonBackReference
     private Company company;
 
-    public Job(Long id, String title, String description, String minSalary, String maxSalary, String location) {
+    public Job() {
+    }
+
+    public Job(Long id, String title, String description, String minSalary, String maxSalary, String location, Company company) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
         this.location = location;
+        this.company = company;
+
     }
 
-    public Job() {
-    }
 
     public Company getCompany() {
         return company;

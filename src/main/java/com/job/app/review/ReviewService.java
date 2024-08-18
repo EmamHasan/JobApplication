@@ -3,9 +3,9 @@ package com.job.app.review;
 import java.util.List;
 
 public interface ReviewService {
-    List<Review> findAll();
-    Review reviewById(Long id);
+    List<Review> findAllReviews(Long companyId);
+    Review reviewById(Long companyId, Long id);
     boolean editReview(Long id, Review review);
-    void createReview(Review review);
+    boolean createReview(Review review, Long companyId);
     boolean deleteReview(Long id);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/job")
 public class JobController {
-    JobService jobService;
+    final JobService jobService;
 
     public JobController(JobService jobService) {
         this.jobService = jobService;

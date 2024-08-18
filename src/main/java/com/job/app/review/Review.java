@@ -1,9 +1,8 @@
 package com.job.app.review;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.job.app.company.Company;
+import jakarta.persistence.*;
 
 @Entity
 public class Review {
@@ -14,14 +13,27 @@ public class Review {
     private String description;
     private Double rating;
 
+    @ManyToOne
+    @JsonBackReference
+    private Company company;
+
     public Review() {
     }
 
-    public Review(Long id, String title, String description, Double rating) {
+    public Review(Long id, String title, String description, Double rating, Company company) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.rating = rating;
+        this.company = company;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Long getId() {
