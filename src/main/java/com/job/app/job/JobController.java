@@ -21,8 +21,13 @@ public class JobController {
     }
     @PostMapping("/")
     public ResponseEntity<String> createJob(@RequestBody Job job){
-        jobService.createJob(job);
-        return new ResponseEntity<>("Job Created Successfully", HttpStatus.CREATED);
+        try{
+            jobService.createJob(job);
+            return new ResponseEntity<>("Job Created Successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Company does not exist", HttpStatus.NOT_IMPLEMENTED);
+        }
+
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

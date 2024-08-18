@@ -3,6 +3,11 @@ package com.job.app.company.impl;
 import com.job.app.company.Company;
 import com.job.app.company.CompanyRepository;
 import com.job.app.company.CompanyService;
+import com.job.app.job.Job;
+import com.job.app.job.JobService;
+import com.job.app.review.Review;
+import com.job.app.review.ReviewService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +16,13 @@ import java.util.Optional;
 @Service
 public class CompanyServiceImpl implements CompanyService {
     final CompanyRepository coRepo;
+    final JobService jobService;
+    final ReviewService reviewService;
 
-    public CompanyServiceImpl(CompanyRepository coRepo) {
+    public CompanyServiceImpl(CompanyRepository coRepo, JobService jobService, @Lazy ReviewService reviewService) {
         this.coRepo = coRepo;
+        this.reviewService = reviewService;
+        this.jobService = jobService;
     }
 
     @Override
@@ -50,10 +59,14 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Boolean deleteCompany(Long id) {
-        Optional<Company> delCom = coRepo.findById(id);
-        if (delCom.isPresent()){
+        Optional<Company> targetCompany = coRepo.findById(id);
+        if (targetCompany.isPresent()){
+            Company tCom = targetCompany.get();
+            tCom.getJobs().forEach((job)->jobService.deleteJob(job.getId()));
+            tCom.getReview().forEach((review)->reviewService.deleteReview(review.getId()));
             coRepo.deleteById(id);
             return true;
-        } return false;
+        }
+        return false;
     }
 }

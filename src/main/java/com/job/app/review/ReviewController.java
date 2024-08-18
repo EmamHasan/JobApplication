@@ -34,12 +34,12 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.reviewById(companyId, id), HttpStatus.OK);
     }
 
-    @PutMapping("/review/")
-    public ResponseEntity<?> editReview(@PathVariable Long companyId, @RequestBody Review review) {
-        boolean res= reviewService.editReview(companyId, review);
+    @PutMapping("/review/{id}")
+    public ResponseEntity<?> editReview(@PathVariable Long companyId, @PathVariable Long id, @RequestBody Review review) {
+        boolean res= reviewService.editReview(companyId, id, review);
         if (res){
             return new ResponseEntity<>("Updated successfully", HttpStatus.OK);
-        } return new ResponseEntity<>("Review not found with the given ID "+companyId, HttpStatus.NOT_FOUND);
+        } return new ResponseEntity<>("Review not found with the given company ID "+companyId+" or Review ID "+id, HttpStatus.NOT_FOUND);
     }
 
 
@@ -47,9 +47,9 @@ public class ReviewController {
     public ResponseEntity<String> deleteReview(@PathVariable Long companyId, @PathVariable Long id) {
         boolean response = reviewService.deleteReview(id);
         if (response){
-            return new ResponseEntity<>("Review deleted with ID"+companyId, HttpStatus.OK);
+            return new ResponseEntity<>("Review deleted with ID "+companyId, HttpStatus.OK);
         }
-        return new ResponseEntity<>("Review not found with ID"+companyId, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Review not found with company ID "+companyId+" or Review ID "+id, HttpStatus.NOT_FOUND);
     }
 
 }

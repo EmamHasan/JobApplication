@@ -42,30 +42,45 @@ public class ReviewServiceImpl implements ReviewService {
         return reviews.stream().filter(review -> review.getId().equals(id)).findFirst().orElse(null);
     }
 
-
     @Override
-    public boolean editReview(Long id, Review review) {
-        Optional<Review> revSearch = revRepo.findById(id);
-        if (revSearch.isPresent()){
-            Review newReview= revSearch.get();
-            newReview.setTitle(review.getTitle());
-            newReview.setDescription(review.getDescription());
-            newReview.setRating(review.getRating());
-            revRepo.save((newReview));
+    public boolean editReview(Long companyId, Long id, Review updatedReview) {
+        if (companyService.getById(companyId) != null){
+            updatedReview.setCompany(companyService.getById(companyId));
+            updatedReview.setId(id);
+            revRepo.save(updatedReview);
             return true;
         }
         return false;
+
     }
+//    @Override
+//    public boolean editReview(Long companyId, Long id, Review review) {
+//        List<Review> revSearch = revRepo.findByCompanyId(companyId);
+//        Review targetReview = revSearch.stream().filter(rev -> rev.getId().equals(id)).findFirst().orElse(null);
+//        if (targetReview!=null){
+//            targetReview.setTitle(review.getTitle());
+//            targetReview.setDescription(review.getDescription());
+//            targetReview.setRating(review.getRating());
+//            revRepo.save((targetReview));
+//            return true;
+//        }
+//        return false;
+//    }
 
 
 
     @Override
     public boolean deleteReview(Long id) {
-        Optional<Review> res= revRepo.findById(id);
-        if (res.isPresent()){
-            revRepo.deleteById(id);
-            return true;
-        } return false;
+        try {
+            Optional<Review> res= revRepo.findById(id);
+            if (res.isPresent()){
+                revRepo.deleteById(id);
+                return true;
+            } return false;
+        } catch (Exception e) {
+            return false;
+        }
+
 
     }
 }
